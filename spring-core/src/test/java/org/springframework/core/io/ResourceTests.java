@@ -327,5 +327,16 @@ public class ResourceTests {
 	public void testReadableChannelNotFoundOnClassPathResource() throws IOException {
 		new ClassPathResource("Resource.class", getClass()).createRelative("X").readableChannel();
 	}
+	@Test
+	public void testFileSystemAbsloutResource() {
+		final DefaultResourceLoader resourceLoader = new DefaultResourceLoader();
+		final String location = "D:\\java_dev_env\\idea_2020\\bin\\log\\gc.log";
+		final Resource resource = resourceLoader.getResource(location);
+		System.out.println(resource.getClass().getName());
+
+		final FileSystemResourceLoader fileSystemResourceLoader = new FileSystemResourceLoader();
+		final Resource resourceByPath = fileSystemResourceLoader.getResourceByPath(location);
+		System.out.println(resourceByPath.getClass());
+	}
 
 }
