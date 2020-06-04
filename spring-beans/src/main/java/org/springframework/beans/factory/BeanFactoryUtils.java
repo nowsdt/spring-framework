@@ -53,6 +53,8 @@ public abstract class BeanFactoryUtils {
 	public static final String GENERATED_BEAN_NAME_SEPARATOR = "#";
 
 	/**
+	 *
+	 * 缓存 {@link #transformedBeanName(String)} 已经转换好的结果。
 	 * Cache from name with factory bean prefix to stripped name without dereference.
 	 * @since 5.1
 	 * @see BeanFactory#FACTORY_BEAN_PREFIX
@@ -72,6 +74,13 @@ public abstract class BeanFactoryUtils {
 	}
 
 	/**
+	 * 除 FactoryBean 的修饰符 &
+	 * 如果 name 以 “&” 为前缀，那么会去掉该 "&"
+	 * 例如，name = "&studentService" ，则会是 name = "studentService"。
+	 *
+	 * 小知识补充。假设配置了一个 FactoryBean 的名字为 "abc" ，那么获取 FactoryBean 创建的 Bean 时，使用 "abc" ，
+	 * 如果获取 FactoryBean 本身，使用 "$abc" 。另外，&定义在 BeanFactory.FACTORY_BEAN_PREFIX = "&" 上
+	 *
 	 * Return the actual bean name, stripping out the factory dereference
 	 * prefix (if any, also stripping repeated factory prefixes if found).
 	 * @param name the name of the bean
