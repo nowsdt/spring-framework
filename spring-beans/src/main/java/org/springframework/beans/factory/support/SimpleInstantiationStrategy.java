@@ -147,17 +147,21 @@ public class SimpleInstantiationStrategy implements InstantiationStrategy {
 			else {
 				ReflectionUtils.makeAccessible(factoryMethod);
 			}
-
+			// 获得原 Method 对象
 			Method priorInvokedFactoryMethod = currentlyInvokedFactoryMethod.get();
 			try {
+				// 设置新的 Method 对象，到 currentlyInvokedFactoryMethod 中
 				currentlyInvokedFactoryMethod.set(factoryMethod);
+				// <x> 创建 Bean 对象
 				Object result = factoryMethod.invoke(factoryBean, args);
+				// 未创建，则创建 NullBean 对象
 				if (result == null) {
 					result = new NullBean();
 				}
 				return result;
 			}
 			finally {
+				// 设置老的 Method 对象，到 currentlyInvokedFactoryMethod 中
 				if (priorInvokedFactoryMethod != null) {
 					currentlyInvokedFactoryMethod.set(priorInvokedFactoryMethod);
 				}
