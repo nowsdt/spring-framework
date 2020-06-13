@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN 2.0//EN" "http://www.springframework.org/dtd/spring-beans-2.0.dtd">
+<beans>
+	<bean id="petA" class="org.springframework.tests.sample.beans.PetA">
+		<constructor-arg ref="petB"/>
+	</bean>
+
+	<bean id="petB" class="org.springframework.tests.sample.beans.PetB">
+		<constructor-arg ref="petC"/>
+	</bean>
+
+	<bean id="petC" class="org.springframework.tests.sample.beans.PetC">
+		<constructor-arg ref="petA"/>
+	</bean>
+</beans>

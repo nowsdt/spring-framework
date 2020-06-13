@@ -32,6 +32,7 @@ import org.springframework.tests.sample.beans.TestBean;
 import org.springframework.util.ObjectUtils;
 
 import static org.junit.Assert.*;
+import static org.junit.Assert.assertTrue;
 
 /**
  * @author Rick Evans
@@ -76,6 +77,22 @@ public class XmlBeanDefinitionReaderTests {
 		reader.setValidationMode(XmlBeanDefinitionReader.VALIDATION_DTD);
 		reader.loadBeanDefinitions(resource);
 		testBeanDefinitions(registry);
+	}
+
+	/**
+	 * 循环依赖 demo
+	 * XmlBeanFactoryTests-complexFactoryCircle.xml
+	 */
+	@Test
+	public void circleDependency() {
+		DefaultListableBeanFactory factory = new DefaultListableBeanFactory();
+		Resource resource = new InputStreamResource(getClass().getResourceAsStream("circleDependence.xml"));
+		XmlBeanDefinitionReader reader = new XmlBeanDefinitionReader(factory);
+		reader.setValidationMode(XmlBeanDefinitionReader.VALIDATION_DTD);
+		reader.loadBeanDefinitions(resource);
+		final Object petA = factory.getBean("petA");
+		System.out.println(petA);
+		assertEquals(petA.getClass(), petA.getClass());
 	}
 
 	@Test
