@@ -262,6 +262,7 @@ public class DefaultSingletonBeanRegistry extends SimpleAliasRegistry implements
 				try {
 					// <3> 初始化 bean
 					// 这个过程其实是调用 createBean() 方法
+					// see org.springframework.beans.factory.support.AbstractBeanFactory#createBean
 					singletonObject = singletonFactory.getObject();
 					newSingleton = true;
 				}

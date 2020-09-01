@@ -45,6 +45,7 @@ public class FactoryBeanTests {
 	private static final Resource WITH_AUTOWIRING_CONTEXT = qualifiedResource(CLASS, "withAutowiring.xml");
 	private static final Resource ABSTRACT_CONTEXT = qualifiedResource(CLASS, "abstract.xml");
 	private static final Resource CIRCULAR_CONTEXT = qualifiedResource(CLASS, "circular.xml");
+	private static final Resource CIRCULAR_LITE_CONTEXT = qualifiedResource(CLASS, "circular-lite.xml");
 
 
 	@Test
@@ -120,6 +121,40 @@ public class FactoryBeanTests {
 		assertSame(impl1, impl1.getImpl2().getImpl1());
 		assertEquals(1, counter.getCount("bean1"));
 		assertEquals(1, counter.getCount("bean2"));
+	}
+
+	@Test
+	public void testCircularReferenceByNameWithPostProcessor() {
+		DefaultListableBeanFactory factory = new DefaultListableBeanFactory();
+		new XmlBeanDefinitionReader(factory).loadBeanDefinitions(CIRCULAR_CONTEXT);
+
+		CountingPostProcessor counter = new CountingPostProcessor();
+		factory.addBeanPostProcessor(counter);
+
+		final BeanImpl1 impl1 = factory.getBean("beanImpl1",BeanImpl1.class);
+		assertNotNull(impl1);
+		assertNotNull(impl1.getImpl2());
+		assertNotNull(impl1.getImpl2());
+		assertSame(impl1, impl1.getImpl2().getImpl1());
+		assertEquals(1, counter.getCount("bean1"));
+		assertEquals(1, counter.getCount("bean2"));
+	}
+
+	@Test
+	public void testCircularReferenceLiteByNameWithPostProcessor() {
+		DefaultListableBeanFactory factory = new DefaultListableBeanFactory();
+		new XmlBeanDefinitionReader(factory).loadBeanDefinitions(CIRCULAR_LITE_CONTEXT);
+
+		CountingPostProcessor counter = new CountingPostProcessor();
+		factory.addBeanPostProcessor(counter);
+
+		final BeanImpl1 impl1 = factory.getBean("beanImpl1",BeanImpl1.class);
+		assertNotNull(impl1);
+		assertNotNull(impl1.getImpl2());
+		assertNotNull(impl1.getImpl2());
+		assertSame(impl1, impl1.getImpl2().getImpl1());
+		assertEquals(1, counter.getCount("beanImpl1"));
+		assertEquals(1, counter.getCount("beanImpl2"));
 	}
 
 

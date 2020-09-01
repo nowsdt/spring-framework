@@ -265,6 +265,9 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 		// 缓存中记录的是最原始的 Bean 状态，我们得到的不一定是我们最终想要的 Bean
 		// Eagerly check singleton cache for manually registered singletons.
 		Object sharedInstance = getSingleton(beanName);
+		// sharedInstance不为空情况
+		// 1. 循环依赖，递归调用情况下
+		// 2. 第二次获取
 		if (sharedInstance != null && args == null) {
 			if (logger.isTraceEnabled()) {
 				if (isSingletonCurrentlyInCreation(beanName)) {
